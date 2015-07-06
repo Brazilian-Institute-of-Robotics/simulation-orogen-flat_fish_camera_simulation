@@ -1,0 +1,12 @@
+<package>
+  <description brief="Rock component to simulate flat_fish camera">
+  
+  </description>
+  <author>Thomio Watanabe</author>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <depend package="gui/vizkit3d_laser_line" />
+  <depend package="simulation/orogen/underwater_camera_simulation" />
+</package>
