@@ -11,10 +11,15 @@ task_context "FlatfishCamera" do
 
     needs_configuration
 
-    # Reas laser scan data to project a laser line
-    input_port "laser_projector_samples", "/base/samples/LaserScan"
+    # Read laser scan data to project a laser line
+    input_port "laser_projector_cmd", "/base/samples/LaserScan"
+        
+    # Read laser scan data to project a laser line
+    input_port "laser_line_pose", "/base/samples/RigidBodyState"
+
+    #  Export laser line links
+    property("laser_line_params", 'std/vector<flat_fish_camera_simulation/LaserLineParams>')
 
     # By default, the task will be periodic with a period of 0.1
     periodic 0.1
 end
-

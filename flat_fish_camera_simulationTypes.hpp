@@ -8,8 +8,14 @@
  * which case you do not need this file
  */
 
+#include <string>
+
 namespace flat_fish_camera_simulation {
+
+    struct LaserLineParams {
+        std::string link_name;
+        std::string pose_port_name;
+    };
 }
 
 #endif
-
