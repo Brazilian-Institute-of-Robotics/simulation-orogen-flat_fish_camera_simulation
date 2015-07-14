@@ -33,6 +33,10 @@ namespace flat_fish_camera_simulation{
         void errorHook();
         void stopHook();
         void cleanupHook();
+
+        virtual void onCreateWorld();
+
+        virtual void onDestroyWorld();
     };
 }
 

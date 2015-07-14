@@ -33,8 +33,6 @@ bool FlatfishCamera::startHook()
     if (! FlatfishCameraBase::startHook())
         return false;
 
-    addLaserLinePlugins();
-
     return true;
 }
 
@@ -51,10 +49,6 @@ void FlatfishCamera::updateHook()
         RTT::InputPort<base::samples::RigidBodyState>* linkPoseCmd = dynamic_cast<RTT::InputPort<base::samples::RigidBodyState>*>(laserLinePosePorts[posePortName]);
         base::samples::RigidBodyState linkPose;
         while (linkPoseCmd->readNewest(linkPose) == RTT::NewData) {
-
-            std::cout << "setTransformation" << std::endl;
-            std::cout << "source_frame: " << linkPose.sourceFrame << std::endl;
-            std::cout << "target_frame: " << linkPose.targetFrame << std::endl;
             vizkit3dWorld->setTransformation(linkPose);
         }
 
@@ -64,7 +58,6 @@ void FlatfishCamera::updateHook()
         while (laserCmd->readNewest(laserData) == RTT::NewData) {
             laserLinePlugins[linkName]->updateData(laserData);
         }
-
 
     }
 
@@ -77,7 +70,6 @@ void FlatfishCamera::errorHook()
 
 void FlatfishCamera::stopHook()
 {
-    removeLaserLinePlugins();
     FlatfishCameraBase::stopHook();
 }
 
@@ -106,8 +98,7 @@ void FlatfishCamera::setupLaserLines() {
         ports()->addEventPort(*dataPortIn);
         ports()->addEventPort(*posePortIn);
 
-        vizkit3d::LaserLine* laserLinePlugin = new vizkit3d::LaserLine();
-        laserLinePlugins.insert(std::make_pair(link_name, laserLinePlugin));
+        laserLinePlugins.insert(std::make_pair(link_name, (vizkit3d::LaserLine*)NULL));
     }
 }
 
@@ -123,23 +114,22 @@ void FlatfishCamera::cleanupLaserLines()
         ports()->removePort(linkName);
 
         delete laserLinePosePorts[posePortName];
-        delete laserLinePlugins[linkName];
         delete it->second;
     }
 
     linkNameToPosePortName.clear();
-    laserLinePlugins.clear();
     laserLineDataPorts.clear();
 }
 
 void FlatfishCamera::addLaserLinePlugins() {
+
     for(std::map<std::string, vizkit3d::LaserLine*>::iterator it = laserLinePlugins.begin();
             it != laserLinePlugins.end(); ++it ) {
-        std::string link_name = it->first;
-        vizkit3d::LaserLine* plugin = it->second;
-        vizkit3dWorld->addPlugin(plugin);
-//        plugin->setPluginName(QString::fromStdString(link_name));
-//        plugin->setVisualizationFrame(QString::fromStdString(link_name));
+        vizkit3d::LaserLine *plugin = new vizkit3d::LaserLine();
+        vizkit3dWorld->getWidget()->addPlugin(plugin);
+        plugin->setPluginName(QString::fromStdString(it->first));
+        plugin->setVisualizationFrame(QString::fromStdString(it->first));
+        it->second = plugin;
     }
 }
 
@@ -148,7 +138,19 @@ void FlatfishCamera::removeLaserLinePlugins() {
     for (std::map<std::string, vizkit3d::LaserLine*>::iterator it = laserLinePlugins.begin();
             it != laserLinePlugins.end(); ++it) {
         vizkit3dWorld->getWidget()->removePlugin(it->second);
+        delete it->second;
     }
 
+    laserLinePlugins.clear();
+}
+
+void FlatfishCamera::onCreateWorld() {
+    FlatfishCameraBase::onCreateWorld();
+    addLaserLinePlugins();
+}
+
+void FlatfishCamera::onDestroyWorld() {
+    removeLaserLinePlugins();
+    FlatfishCameraBase::onDestroyWorld();
 }
 
