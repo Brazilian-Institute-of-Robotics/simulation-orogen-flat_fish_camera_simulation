@@ -14,6 +14,8 @@ namespace flat_fish_camera_simulation{
         std::map<std::string, RTT::base::PortInterface*> laserLineDataPorts;
         std::map<std::string, RTT::base::PortInterface*> laserLinePosePorts;
 
+        std::map<std::string, LaserLineParams> laserLineParams;
+
         std::map<std::string, std::string> linkNameToPosePortName;
 
         std::map<std::string, vizkit3d::LaserLine*> laserLinePlugins;

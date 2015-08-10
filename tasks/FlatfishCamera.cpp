@@ -81,6 +81,7 @@ void FlatfishCamera::cleanupHook()
 
 void FlatfishCamera::setupLaserLines() {
     std::vector<LaserLineParams> params = _laser_line_params.get();
+
     for(std::vector<LaserLineParams>::iterator it = params.begin();
             it != params.end(); ++it )
     {
@@ -99,6 +100,7 @@ void FlatfishCamera::setupLaserLines() {
         ports()->addEventPort(*posePortIn);
 
         laserLinePlugins.insert(std::make_pair(link_name, (vizkit3d::LaserLine*)NULL));
+        laserLineParams.insert(std::make_pair(link_name, (*it)));
     }
 }
 
@@ -126,6 +128,17 @@ void FlatfishCamera::addLaserLinePlugins() {
     for(std::map<std::string, vizkit3d::LaserLine*>::iterator it = laserLinePlugins.begin();
             it != laserLinePlugins.end(); ++it ) {
         vizkit3d::LaserLine *plugin = new vizkit3d::LaserLine();
+
+        LaserLineParams params = laserLineParams[it->first];
+
+        QColor qcolor;
+        qcolor.setRgbF(params.line_color[0],
+                       params.line_color[1],
+                       params.line_color[2]);
+
+        plugin->setColor(qcolor);
+        plugin->setLineWidth(params.line_width);
+
         vizkit3dWorld->getWidget()->addPlugin(plugin);
         plugin->setPluginName(QString::fromStdString(it->first));
         plugin->setVisualizationFrame(QString::fromStdString(it->first));
