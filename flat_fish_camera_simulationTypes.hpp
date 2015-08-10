@@ -1,20 +1,23 @@
 #ifndef flat_fish_camera_simulation_TYPES_HPP
 #define flat_fish_camera_simulation_TYPES_HPP
 
-/* If you need to define types specific to your oroGen components, define them
- * here. Required headers must be included explicitly
- *
- * However, it is common that you will only import types from your library, in
- * which case you do not need this file
- */
-
 #include <string>
+#include <base/Eigen.hpp>
 
 namespace flat_fish_camera_simulation {
 
     struct LaserLineParams {
+
+        LaserLineParams() :
+            line_color(0.0, 1.0, 0.0),
+            line_width(1.0)
+        {
+        }
         std::string link_name;
         std::string pose_port_name;
+
+        base::Vector3d line_color;
+        double line_width;
     };
 }
 
