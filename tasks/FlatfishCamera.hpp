@@ -11,18 +11,41 @@ namespace flat_fish_camera_simulation{
     {
     friend class FlatfishCameraBase;
     protected:
-        std::map<std::string, RTT::base::PortInterface*> laserLineDataPorts;
-        std::map<std::string, RTT::base::PortInterface*> laserLinePosePorts;
 
-        std::map<std::string, LaserLineParams> laserLineParams;
+        /**
+         * Represents the flatfish's front laser line
+         */
+        vizkit3d::LaserLine *laserLineFrontPlugin;
 
-        std::map<std::string, std::string> linkNameToPosePortName;
+        /**
+         * Represents the flatfish's bottom laser line
+         */
+        vizkit3d::LaserLine *laserLineBottomPlugin;
 
-        std::map<std::string, vizkit3d::LaserLine*> laserLinePlugins;
+        /**
+         * Configure the laser line plugin using the parameters
+         *
+         * @param[in, out]  plugin Pointer to laser line plugin
+         * @param[in]       params The laser line parameters
+         */
+        void setupLaserLinePlugin(vizkit3d::LaserLine *plugin, LaserLineParams params);
 
-        void setupLaserLines();
-        void cleanupLaserLines();
+        /**
+         * Read input ports and update laser line plugin
+         * @param[in,out]   plugin Pointer to laser line plugin
+         * @param[in]       dataCmd Input port with laser scan data
+         * @param[in]       poseCmd Input port with laser link pose
+         */
+        inline void updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::InputPort<base::samples::LaserScan>& dataCmd, RTT::InputPort<base::samples::RigidBodyState>& poseCmd);
+
+        /**
+         * Add laser laser line plugins to vizkit3d widget
+         */
         void addLaserLinePlugins();
+
+        /**
+         * Remove laser line plugins to vizkit3d widget
+         */
         void removeLaserLinePlugins();
 
     public:
