@@ -8,13 +8,32 @@ import_types_from "flat_fish_camera_simulationTypes.hpp"
 
 task_context "FlatfishCamera" do
     subclasses 'underwater_camera_simulation::Task'
-
     needs_configuration
 
-    # Reas laser scan data to project a laser line
-    input_port "laser_projector_samples", "/base/samples/LaserScan"
+    # laser line front pose
+    # receive the pose of the link that represents the flatfish's front laser line
+    input_port "laser_line_front_pose_cmd", "/base/samples/RigidBodyState"
+
+    # laser line bottom pose
+    # receive the pose of the link that represents the flatfish's bottom laser line
+    input_port "laser_line_bottom_pose_cmd", "/base/samples/RigidBodyState"
+
+    # the laser line front data
+    # receive the laser scan data from gazebo's laser scan sensor
+    # this laser scan sensor should be in the same pose of the flat_fish front laser line
+    input_port "laser_line_front_data_cmd", "/base/samples/LaserScan"
+
+    # the laser line bottom data
+    # receive the laser scan data from gazebo's laser scan sensor
+    # this laser scan sensor should be in the same pose of the flat_fish bottom laser line
+    input_port "laser_line_bottom_data_cmd", "/base/samples/LaserScan"
+
+    # set parameters for the front laser line
+    property("laser_line_front_params", '/flat_fish_camera_simulation/LaserLineParams')
+
+    # set parameters for the bottom laser line
+    property("laser_line_bottom_params", '/flat_fish_camera_simulation/LaserLineParams')
 
     # By default, the task will be periodic with a period of 0.1
     periodic 0.1
 end
-
