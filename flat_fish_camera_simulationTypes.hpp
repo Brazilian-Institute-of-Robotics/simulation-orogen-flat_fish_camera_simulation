@@ -14,7 +14,6 @@ namespace flat_fish_camera_simulation {
         {
         }
         std::string link_name;
-        std::string pose_port_name;
 
         base::Vector3d line_color;
         double line_width;
