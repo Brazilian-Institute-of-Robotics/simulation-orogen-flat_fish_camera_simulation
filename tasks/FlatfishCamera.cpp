@@ -27,6 +27,7 @@ bool FlatfishCamera::configureHook()
     if (! FlatfishCameraBase::configureHook())
         return false;
 
+    addLaserLinePlugins();
     return true;
 }
 
@@ -80,6 +81,7 @@ void FlatfishCamera::stopHook()
 
 void FlatfishCamera::cleanupHook()
 {
+    removeLaserLinePlugins();
     FlatfishCameraBase::cleanupHook();
 }
 
@@ -124,15 +126,5 @@ void FlatfishCamera::removeLaserLinePlugins() {
         delete laserLineBottomPlugin;
         laserLineBottomPlugin  = NULL;
     }
-}
-
-void FlatfishCamera::onCreateWorld() {
-    FlatfishCameraBase::onCreateWorld();
-    addLaserLinePlugins();
-}
-
-void FlatfishCamera::onDestroyWorld() {
-    removeLaserLinePlugins();
-    FlatfishCameraBase::onDestroyWorld();
 }
 
