@@ -28,6 +28,12 @@ task_context "FlatfishCamera" do
     # this laser scan sensor should be in the same pose of the flat_fish bottom laser line
     input_port "laser_line_bottom_data_cmd", "/base/samples/LaserScan"
 
+    # The frame of the front laser line
+    property("laser_line_front_frame", '/std/string')
+
+    # The frame of the bottom laser line
+    property("laser_line_bottom_frame", '/std/string')
+
     # set parameters for the front laser line
     property("laser_line_front_params", '/flat_fish_camera_simulation/LaserLineParams')
 

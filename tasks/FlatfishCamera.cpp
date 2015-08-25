@@ -88,14 +88,14 @@ void FlatfishCamera::cleanupHook()
 void FlatfishCamera::addLaserLinePlugins() {
     laserLineFrontPlugin = new vizkit3d::LaserLine();
     vizkit3dWorld->getWidget()->addPlugin(laserLineFrontPlugin);
-    setupLaserLinePlugin(laserLineFrontPlugin, _laser_line_front_params.get());
+    setupLaserLinePlugin(laserLineFrontPlugin, _laser_line_front_frame.get(), _laser_line_front_params.get());
 
     laserLineBottomPlugin = new vizkit3d::LaserLine();
     vizkit3dWorld->getWidget()->addPlugin(laserLineBottomPlugin);
-    setupLaserLinePlugin(laserLineBottomPlugin, _laser_line_bottom_params.get());
+    setupLaserLinePlugin(laserLineBottomPlugin, _laser_line_bottom_frame.get(), _laser_line_bottom_params.get());
 }
 
-void FlatfishCamera::setupLaserLinePlugin(vizkit3d::LaserLine *plugin, LaserLineParams params)
+void FlatfishCamera::setupLaserLinePlugin(vizkit3d::LaserLine *plugin, std::string const& frame, LaserLineParams params)
 {
     QColor qcolor;
     qcolor.setRgbF(params.line_color[0], params.line_color[1], params.line_color[2]);
@@ -103,12 +103,12 @@ void FlatfishCamera::setupLaserLinePlugin(vizkit3d::LaserLine *plugin, LaserLine
     /**
      * the plugin name is the link name
      */
-    plugin->setPluginName(QString::fromStdString(params.link_name));
+    plugin->setPluginName(QString::fromStdString(frame));
 
     /**
      * the frame name must be the same name of the link which represents the laser line in model
      */
-    plugin->setVisualizationFrame(QString::fromStdString(params.link_name));
+    plugin->setVisualizationFrame(QString::fromStdString(frame));
     plugin->setColor(qcolor);
     plugin->setLineWidth(params.line_width);
 }
