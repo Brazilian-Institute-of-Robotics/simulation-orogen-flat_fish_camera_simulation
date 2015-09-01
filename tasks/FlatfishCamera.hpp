@@ -28,7 +28,7 @@ namespace flat_fish_camera_simulation{
          * @param[in, out]  plugin Pointer to laser line plugin
          * @param[in]       params The laser line parameters
          */
-        void setupLaserLinePlugin(vizkit3d::LaserLine *plugin, LaserLineParams params);
+        void setupLaserLinePlugin(vizkit3d::LaserLine *plugin, std::string const& frame, LaserLineParams params);
 
         /**
          * Read input ports and update laser line plugin
@@ -58,10 +58,6 @@ namespace flat_fish_camera_simulation{
         void errorHook();
         void stopHook();
         void cleanupHook();
-
-        virtual void onCreateWorld();
-
-        virtual void onDestroyWorld();
     };
 }
 

@@ -13,7 +13,6 @@ namespace flat_fish_camera_simulation {
             line_width(1.0)
         {
         }
-        std::string link_name;
 
         base::Vector3d line_color;
         double line_width;
