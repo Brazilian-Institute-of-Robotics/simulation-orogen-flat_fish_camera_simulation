@@ -56,7 +56,7 @@ void FlatfishCamera::updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::Inp
      * Read laser line link pose
      */
     base::samples::RigidBodyState pose;
-    while (poseCmd.readNewest(pose) == RTT::NewData) {
+    if (poseCmd.readNewest(pose) == RTT::NewData) {
         vizkit3dWorld->setTransformation(pose);
     }
 
@@ -64,7 +64,7 @@ void FlatfishCamera::updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::Inp
      * read laser scan data sent
      */
     base::samples::LaserScan data;
-    while (dataCmd.readNewest(data) == RTT::NewData) {
+    if (dataCmd.readNewest(data) == RTT::NewData) {
         plugin->updateData(data);
     }
 }
