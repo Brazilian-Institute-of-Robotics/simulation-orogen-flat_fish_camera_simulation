@@ -36,7 +36,7 @@ namespace flat_fish_camera_simulation{
          * @param[in]       dataCmd Input port with laser scan data
          * @param[in]       poseCmd Input port with laser link pose
          */
-        inline void updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::InputPort<base::samples::LaserScan>& dataCmd, RTT::InputPort<base::samples::RigidBodyState>& poseCmd);
+        inline void updateLaserLinePlugin(vizkit3d::LaserLine *plugin, std::string const& frame, RTT::InputPort<base::samples::LaserScan>& dataCmd, RTT::InputPort<base::samples::RigidBodyState>& poseCmd);
 
         /**
          * Add laser laser line plugins to vizkit3d widget

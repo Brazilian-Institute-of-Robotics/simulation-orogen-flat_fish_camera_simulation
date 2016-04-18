@@ -44,19 +44,21 @@ void FlatfishCamera::updateHook()
     FlatfishCameraBase::updateHook();
 
     //update front laser line plugin
-    updateLaserLinePlugin(laserLineFrontPlugin, _laser_line_front_data_cmd, _laser_line_front_pose_cmd);
+    updateLaserLinePlugin(laserLineFrontPlugin, _laser_line_front_frame.get(), _laser_line_front_data_cmd, _laser_line_front_pose_cmd);
 
     //update bottom laser line plugin
-    updateLaserLinePlugin(laserLineBottomPlugin, _laser_line_bottom_data_cmd, _laser_line_bottom_pose_cmd);
+    updateLaserLinePlugin(laserLineBottomPlugin, _laser_line_bottom_frame.get(), _laser_line_bottom_data_cmd, _laser_line_bottom_pose_cmd);
 }
 
-void FlatfishCamera::updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::InputPort<base::samples::LaserScan>& dataCmd, RTT::InputPort<base::samples::RigidBodyState>& poseCmd)
+void FlatfishCamera::updateLaserLinePlugin(vizkit3d::LaserLine *plugin, std::string const& frame, RTT::InputPort<base::samples::LaserScan>& dataCmd, RTT::InputPort<base::samples::RigidBodyState>& poseCmd)
 {
     /**
      * Read laser line link pose
      */
     base::samples::RigidBodyState pose;
-    while (poseCmd.readNewest(pose) == RTT::NewData) {
+    if (poseCmd.readNewest(pose) == RTT::NewData) {
+        if (pose.sourceFrame != frame)
+            throw std::runtime_error("unexpected source frame " + pose.sourceFrame + " found in laser line pose, expected " + frame);
         vizkit3dWorld->setTransformation(pose);
     }
 
@@ -64,7 +66,7 @@ void FlatfishCamera::updateLaserLinePlugin(vizkit3d::LaserLine *plugin, RTT::Inp
      * read laser scan data sent
      */
     base::samples::LaserScan data;
-    while (dataCmd.readNewest(data) == RTT::NewData) {
+    if (dataCmd.readNewest(data) == RTT::NewData) {
         plugin->updateData(data);
     }
 }
